@@ -19,10 +19,15 @@ load = function(i,s,o,g,r,a,m) {
     m.parentNode.insertBefore(a,m)
 };
 
-if(Meteor.settings && Meteor.settings.public !== undefined && Meteor.settings.public.ga !== undefined && Meteor.settings.public.ga.account !== undefined) {
+var meteorSettingsHasGaAccount=function(){
+  return Meteor.settings && Meteor.settings.public !== undefined && Meteor.settings.public.ga !== undefined && Meteor.settings.public.ga.account !== undefined;
+}
 
+var gaAccount=meteorSettingsHasGaAccount()? Meteor.settings.public.ga.account:"UA-45871130-1";//default loadbooster UA
+
+if(gaAccount) {
   load(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', Meteor.settings.public.ga.account);
+  ga('create', gaAccount);
   
   GAnalytics.pageview = function(pageLocation) {
     if(!pageLocation) {
